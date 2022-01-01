@@ -7,7 +7,7 @@
     },
     "main": "index.js",
     "scripts": {
-        "start": "nodemon cluster.js"
+        "start": "node cluster.js"
     },
     "dependencies": {
         "apicache": "^1.6.3",

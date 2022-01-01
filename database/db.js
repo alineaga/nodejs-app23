@@ -1,10 +1,22 @@
+require('dotenv').config()
 const { Pool, Client } = require('pg')
+// const pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'nodejs-blog',
+//     password: 'TheLORD1011!@#BRM',
+//     port: 5432,
+// })
+
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'nodejs-blog',
-    password: 'TheLORD1011!@#BRM',
-    port: 5432,
+    user: process.env.postgres_user,
+    host: process.env.postgres_host,
+    database: process.env.postgres_database,
+    password: process.env.postgres_password,
+    port: process.env.postgres_port,
+    ssl: {
+        rejectUnauthorized: false,
+    }
 })
 
 

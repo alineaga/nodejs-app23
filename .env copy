@@ -3,8 +3,8 @@ jwtsecret = 'dsf@4=%#ekjf-23=RFFA2aeifgs3SD(W+%@#'
 SESS_COOKIE_SECRET = 'skd@_=iwdI@#ORFe_@=2dweasdkgf)mw39'
 URL_ORIGIN = 'http://localhost:8080'
 allowedOrigins = ["http://localhost:8080", "http://localhost:8081" ]
-postgres_user = 'dznjctjxghylng'
-postgres_host = 'ec2-34-236-87-247.compute-1.amazonaws.com'
-postgres_database = 'd8tlfj37k0oslo'
-postgres_password = '48af47993ef5f82c96dd1411f8dcd4cbd91e2bf2817d65083f4e888d35091dce'
+postgres_user = 'postgres'
+postgres_host = 'localhost'
+postgres_database = 'nodejs-blog'
+postgres_password = 'TheLORD1011!@#BRM'
 postgres_port = 5432

@@ -263,6 +263,8 @@ userRoutes.post('/api/register', async (req, res) => {
 
 
 userRoutes.post('/api/login', async (req, res) => {
+    const originlogin = req.headers.origin
+    console.log('originlogin: ', originlogin)
     try {
         const { email, password } = req.body
         const selecttquery = "select * from users where user_email like $1"

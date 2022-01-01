@@ -109,9 +109,10 @@ export default {
   },
   methods: {
     getcsrfToken() {
+      //http://localhost:5000
       axios
         .create({ withCredentials: true })
-        .get("http://localhost:5000/api/csrf")
+        .get("https://vast-retreat-83857.herokuapp.com/api/csrf")
         .then((response) => {
           //console.log("res_getcsrfToken: ", response);
           axios.defaults.headers.common["X-CSRF-TOKEN"] =
@@ -145,8 +146,9 @@ export default {
       console.log("email_password: ", email + " : " + password);
       if (email && password && email.length && password.length) {
         return new Promise((resolve, reject) => {
+          //http://localhost:5000
           axios({
-            url: "http://localhost:5000/api/login",
+            url: "https://vast-retreat-83857.herokuapp.com/api/login",
             data: qs.stringify(user),
             method: "POST",
             withCredentials: true,

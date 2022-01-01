@@ -143,8 +143,9 @@ export default {
         user_password.length
       ) {
         return new Promise((resolve, reject) => {
+          //http://localhost:5000
           axios({
-            url: "http://localhost:5000/api/register",
+            url: "https://vast-retreat-83857.herokuapp.com/api/register",
             data: qs.stringify(user),
             method: "POST",
             withCredentials: true,
@@ -179,7 +180,7 @@ export default {
       if (email && password && email.length && password.length) {
         return new Promise((resolve, reject) => {
           axios({
-            url: "http://localhost:5000/login",
+            url: "http://https://vast-retreat-83857.herokuapp.com/login",
             data: qs.stringify(user),
             method: "POST",
             withCredentials: true,

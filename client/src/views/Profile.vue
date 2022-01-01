@@ -96,7 +96,7 @@ export default {
 
     getPosts: function () {
       axios({
-        url: "http://localhost:5000/api/posts",
+        url: "https://vast-retreat-83857.herokuapp.com/api/posts",
         method: "GET",
         withCredentials: true,
       })
@@ -117,7 +117,7 @@ export default {
     verifyLogin: function () {
       axios
         .create({ withCredentials: true })
-        .get("http://localhost:5000/api/verify")
+        .get("https://vast-retreat-83857.herokuapp.com/api/verify")
         .then((resp) => {
           console.log("resp_verify0: ", resp);
           this.user_name = resp.data.user_name;
@@ -136,7 +136,7 @@ export default {
     verifyCsrf: function () {
       axios
         .create({ withCredentials: true })
-        .get("http://localhost:5000/api/csrf")
+        .get("https://vast-retreat-83857.herokuapp.com/api/csrf")
         .then((response) => {
           //console.log("response_verifyCsrf:", response.data.message);
           console.log(response.data.message);

@@ -95,8 +95,9 @@ export default {
     },
 
     getPosts: function () {
+      //http://localhost:5000 https://vast-retreat-83857.herokuapp.com
       axios({
-        url: "https://vast-retreat-83857.herokuapp.com/api/posts",
+        url: "http://localhost:5000/api/posts",
         method: "GET",
         withCredentials: true,
       })
@@ -115,35 +116,43 @@ export default {
     },
 
     verifyLogin: function () {
-      axios
-        .create({ withCredentials: true })
-        .get("https://vast-retreat-83857.herokuapp.com/api/verify")
-        .then((resp) => {
-          console.log("resp_verify0: ", resp);
-          this.user_name = resp.data.user_name;
-          //console.log("resp_verify1: ", resp.data);
-          //console.log("resp_verify2: ", resp.data.cookieVerify);
-          if (resp.data.error) {
-            alert("profile Sesiunea a expirat! Va rugam sa va logati!");
-            this.$router.push("/login2");
-          }
-        })
-        .catch((err) => {
-          console.log("err_verify: ", err);
-        });
+      return new Promise((resolve, reject) => {
+        //http://localhost:5000 https://vast-retreat-83857.herokuapp.com
+        axios
+          .create({ withCredentials: true })
+          .get("http://localhost:5000/api/verify")
+          .then((resp) => {
+            //console.log("resp_verify0: ", resp);
+            this.user_name = resp.data.user_name;
+            //console.log("resp_verify1: ", resp.data);
+            //console.log("resp_verify2: ", resp.data.cookieVerify);
+            if (resp.data.error) {
+              alert("profile Sesiunea a expirat! Va rugam sa va logati!");
+              this.$router.push("/login2");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
 
     verifyCsrf: function () {
-      axios
-        .create({ withCredentials: true })
-        .get("https://vast-retreat-83857.herokuapp.com/api/csrf")
-        .then((response) => {
-          //console.log("response_verifyCsrf:", response.data.message);
-          console.log(response.data.message);
-        })
-        .catch((err) => {
-          console.log("err_verifyCsrf: ", err);
-        });
+      return new Promise((resolve, reject) => {
+        //https://vast-retreat-83857.herokuapp.com
+        axios
+          .create({ withCredentials: true })
+          .get("http://localhost:5000/api/csrf")
+          .then((response) => {
+            //console.log("response_verifyCsrf:", response.data.message);
+            console.log(response.data.message);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
   },
   beforeMount() {

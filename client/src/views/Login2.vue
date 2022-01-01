@@ -109,17 +109,22 @@ export default {
   },
   methods: {
     getcsrfToken() {
-      //http://localhost:5000
-      axios
-        .create({ withCredentials: true })
-        .get("https://vast-retreat-83857.herokuapp.com/api/csrf")
-        .then((response) => {
-          //console.log("res_getcsrfToken: ", response);
-          axios.defaults.headers.common["X-CSRF-TOKEN"] =
-            response.data.csrfToken;
-          this.csrfToken = response.data.csrfToken;
-        })
-        .catch((error) => console.log(error));
+      return new Promise((resolve, reject) => {
+        //http://localhost:5000 https://vast-retreat-83857.herokuapp.com
+        axios
+          .create({ withCredentials: true })
+          .get("http://localhost:5000/api/csrf")
+          .then((response) => {
+            //console.log("res_getcsrfToken: ", response);
+            axios.defaults.headers.common["X-CSRF-TOKEN"] =
+              response.data.csrfToken;
+            this.csrfToken = response.data.csrfToken;
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
 
     loadOnce: function () {
@@ -148,7 +153,7 @@ export default {
         return new Promise((resolve, reject) => {
           //http://localhost:5000
           axios({
-            url: "https://vast-retreat-83857.herokuapp.com/api/login",
+            url: "http://localhost:5000/api/login",
             data: qs.stringify(user),
             method: "POST",
             withCredentials: true,

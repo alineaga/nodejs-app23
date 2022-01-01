@@ -96,12 +96,12 @@ userRoutes.get('/api/', cache('1 minutes'), (req, res) => {
 const authorization = async (req, res, next) => {
     try {
         const sestest = await req.session
-        console.log('session__authorization: ', sestest)
+        //console.log('session__authorization: ', sestest)
         //console.log('req.cookies__authorization: ', req.cookies)
         const cookieVerify = await req.cookies.session_initializing
-        console.log('cookieVerify: ', cookieVerify)
+        //console.log('cookieVerify: ', cookieVerify)
         const verifyToken = await jwt.verify(cookieVerify, process.env.jwtsecret);
-        console.log('verifyToken: ', verifyToken)
+        //console.log('verifyToken: ', verifyToken)
         if (verifyToken && cookieVerify === req.session.token) {
             // res.json({
             //     cookieVerify: cookieVerify
@@ -283,7 +283,7 @@ userRoutes.post('/api/login', async (req, res) => {
                         console.log('result_compare:', result)
                         if (result) {
                             const token = jwt.sign(response.rows[0].user_name, jwtsecret)
-                            console.log('token: ', token)
+                            //console.log('token: ', token)
                             // res.cookie('session_iniatializing', token)
                             const rememberDays = 1
                             const ckOptions = {

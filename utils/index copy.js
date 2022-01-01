@@ -35,7 +35,7 @@ const rateLimit = require('express-rate-limit')
 // );
 app.set('trust proxy', 1)
 
-const errorHandler = require('./middleware/error')
+const errorHandler = require('../middleware/error')
 const jwtsecret = process.env.jwtsecret
 const { Pool, Client } = require('pg');
 const uuid4 = require('uuid4');
@@ -66,7 +66,7 @@ const pgSession = require('connect-pg-simple')(expressSession);
 //     password: 'TheLORD1011!@#BRM',
 //     port: 5432,
 // })
-const pool = require('./database/db.js')
+const pool = require('../database/db.js')
 
 
 app.use(cors(corsOptions));

@@ -1,10 +1,13 @@
 <template>
   <div class="profile">
     <h3>This is an profile page of {{ user_name }}</h3>
-
+    <input type="hidden" name="_csrf" v-model="csrfToken" />
     <button type="submit" @click.prevent="getPosts">Get posts</button>
     <br /><br />
-    <button v-on:click="testEvent">Emit Event</button>
+    <button type="submit" @click="verifyCsrf">VerifyCsrf</button>
+    <br /><br />
+    <!-- <button type="submit" @click="verifyCsrf2">VerifyCsrf 2</button> -->
+    <!-- <button v-on:click="testEvent">Emit Event</button> -->
     <!-- <label>
       <input type="checkbox" checked="!checked" name="remember" /> Remember me
     </label> 
@@ -75,6 +78,7 @@ export default {
   },
   data() {
     return {
+      csrfToken: "",
       isOpen: true,
       i: 1,
       verifyToken: false,
@@ -102,9 +106,9 @@ export default {
         withCredentials: true,
       })
         .then((resp) => {
-          console.log("resp_getPosts0: ", resp);
-          console.log("resp_getPosts1 ", resp.data);
-          console.log("resp_getPosts2 ", resp.data.posts);
+          // console.log("resp_getPosts0: ", resp);
+          // console.log("resp_getPosts1 ", resp.data);
+          // console.log("resp_getPosts2 ", resp.data.posts);
           this.posts = resp.data.posts;
           if (resp.data.error) {
             this.$router.push("/login2");
@@ -121,15 +125,17 @@ export default {
         axios
           .create({ withCredentials: true })
           .get("http://localhost:5000/api/verify")
-          .then((resp) => {
+          .then((response) => {
             //console.log("resp_verify0: ", resp);
-            this.user_name = resp.data.user_name;
+            this.user_name = response.data.user_name;
+            this.csrfToken = response.data.csrfToken;
             //console.log("resp_verify1: ", resp.data);
             //console.log("resp_verify2: ", resp.data.cookieVerify);
-            if (resp.data.error) {
+            if (response.data.error) {
               alert("profile Sesiunea a expirat! Va rugam sa va logati!");
               this.$router.push("/login2");
             }
+            resolve(response);
           })
           .catch((error) => {
             console.log(error);
@@ -147,6 +153,65 @@ export default {
           .then((response) => {
             //console.log("response_verifyCsrf:", response.data.message);
             console.log(response.data.message);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
+
+    verifyCsrf1: function () {
+      return new Promise((resolve, reject) => {
+        //https://vast-retreat-83857.herokuapp.com
+        // axios
+        //   .create({ withCredentials: true })
+        //   .post("http://localhost:5000/api/csrftoken")
+        //   .then((response) => {
+        //     console.log("response_verifyCsrf2:", response);
+        //     console.log(response.data.message);
+        //     resolve(response);
+        //   })
+        axios({
+          url: "http://localhost:5000/api/csrftoken",
+          data: { data: "test" },
+          method: "POST",
+          withCredentials: true,
+        })
+          .then((response) => {
+            console.log("response_verifyCsrf2:", response);
+            console.log(response.data.message);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
+
+    verifyCsrf2: function () {
+      return new Promise((resolve, reject) => {
+        //https://vast-retreat-83857.herokuapp.com
+        // axios
+        //   .create({ withCredentials: true })
+        //   .post("http://localhost:5000/api/csrftoken")
+        //   .then((response) => {
+        //     console.log("response_verifyCsrf2:", response);
+        //     console.log(response.data.message);
+        //     resolve(response);
+        //   })
+        axios({
+          url: "http://localhost:5000/api/csrftokennew",
+          data: { data: "test" },
+          method: "POST",
+          withCredentials: true,
+        })
+          .then((response) => {
+            console.log("response_verifyCsrf2:", response);
+            console.log(response.data.message);
+            resolve(response);
           })
           .catch((error) => {
             console.log(error);

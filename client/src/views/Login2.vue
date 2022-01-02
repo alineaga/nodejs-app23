@@ -119,6 +119,7 @@ export default {
             axios.defaults.headers.common["X-CSRF-TOKEN"] =
               response.data.csrfToken;
             this.csrfToken = response.data.csrfToken;
+            resolve(response);
           })
           .catch((error) => {
             console.log(error);
@@ -171,6 +172,7 @@ export default {
                 axios.defaults.headers.common["Authorization"] = token;
                 this.$router.push("/profile");
               }
+              resolve(resp);
             })
             .catch((err) => {
               localStorage.removeItem("token");

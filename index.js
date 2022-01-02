@@ -96,7 +96,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
-//app.use(csrf({ cookie: true }))
+app.use(csrf({ cookie: true }))
 
 
 app.use(expressSession({
@@ -119,7 +119,9 @@ app.get("/api/csrf", csrfProtection, async (req, res, next) => {
         }
         //console.log('user_session', [req.session])
         res.locals._csrf = await req.csrfToken();
-        res.json({ csrfToken: req.csrfToken(), csrf: req.session.csrf, message: 'Hi Alin' })
+        console.log('res.locals._csrf: ', res.locals._csrf)
+        console.log('req.session.csrf: ', req.session.csrf)
+        res.json({ csrfToken: res.locals._csrf, csrf: req.session.csrf, message: 'Hi Alin' })
     } catch (error) {
         console.log('error_get/api/csrf', error)
     }
@@ -138,12 +140,7 @@ app.get("/api/csrf", csrfProtection, async (req, res, next) => {
 //     }
 
 // })
-app.post("/api/csrftoken", csrfProtection, async (err, req, res, next) => {
-    if (err.code !== 'EBADCSRFTOKEN') return next(err)
-    // handle CSRF token errors here
-    res.status(403).send({ error: 'csrf token missing' })
-    res.send('form tampered with')
-})
+
 // error handler
 app.use(function (err, req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -152,11 +149,17 @@ app.use(function (err, req, res, next) {
     res.status(403)
     res.send('form tampered with')
 })
+
+// app.all('*', function (req, res) {
+//     res.cookie('X-CSRF-TOKEN', req.csrfToken())
+//     res.render('index')
+// })
+
 //csrf
 // app.get("/api/csrftoken", csrfProtection, userRoutes)
 // app.post("/api/csrftoken", csrfProtection, userRoutes)
 //get
-app.get("/api/", csrfProtection, userRoutes)
+app.get("/hello", userRoutes)
 app.get("/api/posts", csrfProtection, userRoutes)
 app.get("/api/posts/title/:title", csrfProtection, userRoutes)
 app.get("/api/posts/id/:id", csrfProtection, userRoutes)
@@ -164,7 +167,7 @@ app.get("/api/logout", csrfProtection, userRoutes)
 app.get("/api/verify", csrfProtection, userRoutes)
 //posts
 app.post("/api/posts", csrfProtection, userRoutes)
-app.post("/api/register", userRoutes)
+app.post("/api/register", csrfProtection, userRoutes)
 app.post("/api/login", csrfProtection, userRoutes)
 
 

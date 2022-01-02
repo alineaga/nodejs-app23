@@ -88,15 +88,18 @@ userRoutes.use(errorHandler)
 //     res.send('form tampered with')
 // })
 
-userRoutes.get('/api/', cache('1 minutes'), (req, res) => {
-    res.json("Hello ")
+userRoutes.get('/hello', cache('1 minutes'), (req, res) => {
+    //res.json("Hello ")
+    res.status(200).json({ message: "Hi, welcome" })
 });
 
 
 const authorization = async (req, res, next) => {
     try {
-        const sestest = await req.session
-        //console.log('session__authorization: ', sestest)
+        // const sestest = await req.session
+        // const sesorigin = await req.headers
+        // console.log('sestest: ', sestest)
+        // console.log('sesorigin: ', sesorigin)
         //console.log('req.cookies__authorization: ', req.cookies)
         const cookieVerify = await req.cookies.session_initializing
         //console.log('cookieVerify: ', cookieVerify)
@@ -263,10 +266,10 @@ userRoutes.post('/api/register', async (req, res) => {
 
 
 userRoutes.post('/api/login', async (req, res) => {
-    const originlogin = req.headers.origin
+    const originlogin = await req.headers.origin
     console.log('originlogin: ', originlogin)
     try {
-        const { email, password } = req.body
+        const { email, password } = await req.body
         const selecttquery = "select * from users where user_email like $1"
         const valuesquery = [email]
         await pool.query(selecttquery, valuesquery, (err, response) => {
@@ -322,7 +325,9 @@ userRoutes.post('/api/login', async (req, res) => {
 userRoutes.get('/api/verify', authorization, async (req, res) => {
     try {
         let user_name = await req.session.user_name
-        res.json({ user_name: user_name, csrf: req.session.csrf })
+        // let csrf = await req.session.csrf
+        //console.log('csrf: ', csrf)
+        res.json({ user_name: user_name, csrfToken: req.session.csrf })
     } catch (err) {
         console.log('err_/api/verify: ', err)
         res.json({

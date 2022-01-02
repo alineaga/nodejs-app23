@@ -29,7 +29,7 @@
           v-model="user_password"
           required
         />
-
+        <input type="hidden" name="_csrf" v-model="csrfToken" />
         <button type="submit" @click.prevent="register">Register</button>
         <!-- <label>
           <input type="checkbox" checked="!checked" name="remember" /> Remember
@@ -51,6 +51,7 @@ export default {
   },
   data() {
     return {
+      csrfToken: null,
       user_name: "",
       checked: false,
       linktermeni: "Termeni_si_conditii_de_utilizare",
@@ -111,7 +112,30 @@ export default {
       this.loader = null;
     },
   },
+  beforeMount() {
+    //this.getcsrf()
+    this.getcsrfToken();
+  },
   methods: {
+    getcsrfToken() {
+      return new Promise((resolve, reject) => {
+        //http://localhost:5000 https://vast-retreat-83857.herokuapp.com
+        axios
+          .create({ withCredentials: true })
+          .get("http://localhost:5000/api/csrf")
+          .then((response) => {
+            //console.log("res_getcsrfToken: ", response);
+            axios.defaults.headers.common["X-CSRF-TOKEN"] =
+              response.data.csrfToken;
+            this.csrfToken = response.data.csrfToken;
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
     loadOnce: function () {
       //location.reload();
       this.loading = true;
@@ -145,7 +169,7 @@ export default {
         return new Promise((resolve, reject) => {
           //http://localhost:5000
           axios({
-            url: "https://vast-retreat-83857.herokuapp.com/api/register",
+            url: "http://localhost:5000/api/register",
             data: qs.stringify(user),
             method: "POST",
             withCredentials: true,
